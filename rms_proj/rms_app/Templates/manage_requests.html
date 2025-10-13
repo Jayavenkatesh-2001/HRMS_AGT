@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manage Requests</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.3),
+        0 6px 24px rgba(0, 0, 0, 0.1);
+      width: clamp(320px, 90vw, 1200px);
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007bff;
+      text-transform: uppercase;
+    }
+
+    .table-wrapper {
+      max-height: 400px;
+      overflow-y: auto;
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      background-color: #0b0b0b;
+      color: #ffffff;
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(4px);
+      padding: 12px;
+      text-align: center;
+      z-index: 1;
+    }
+
+    tbody td {
+      background-color: rgba(255, 255, 255, 0.6);
+      color: #000;
+      padding: 10px;
+      text-align: center;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn-outline-gradient {
+      border: 2px solid #28a745;
+      color: #28a745;
+      background-color: transparent;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-gradient:hover {
+      background-color: #28a745;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-outline-danger {
+      border: 2px solid #dc3545;
+      color: #dc3545;
+      background-color: transparent;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-danger:hover {
+      background-color: #dc3545;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
+    }
+
+    .btn-back {
+      background-color: #28a745;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 30px;
+    }
+
+    .btn-back:hover {
+      background-color: #ffffff;
+      color: #28a745;
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(40, 167, 69, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-title">Manage Requests</div>
+
+    <div class="table-wrapper">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Requirement</th>
+            <th>Date</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in request %}
+          <tr>
+            <td>{{ req.user.username }}</td>
+            <td>{{ req.requirement }}</td>
+            <td>{{ req.date }}</td>
+            <td>{{ req.email }}</td>
+            <td>{{ req.phone }}</td>
+            <td>{{ req.status }}</td>
+            <td>
+              {% if req.status == 'Pending' %}
+              <div class="action-buttons">
+                <button class="btn-outline-gradient" onclick="showModal('approve', '{{ req.id }}')">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="btn-outline-danger" onclick="showModal('reject', '{{ req.id }}')">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+              {% else %}
+              {{ req.status }}
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7">No requests found</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-4">
+      {% if user.is_superuser %}
+        <a href="{% url 'home' %}" class="btn-back">← Back to Home</a>
+      {% elif user.is_staff %}
+        <a href="{% url 'admin_dashboard' %}" class="btn-back">← Back to Admin Dashboard</a>
+      {% else %}
+        <a href="#" class="btn-back">← Back</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="actionModalLabel">Confirm Action</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to <span id="modalActionType"></span> this request?
+        </div>
+        <div class="modal-footer">
+          <form method="post" id="modalForm">
+            {% csrf_token %}
+            <input type="hidden" name="request_id" id="modalRequestId" />
+            <input type="hidden" name="action_type" id="modalActionInput" />
+            <button type="submit" class="btn btn-primary">Yes, Confirm</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function showModal(action, requestId) {
+      document.getElementById('modalActionType').textContent = action;
+      document.getElementById('modalRequestId').value = requestId;
+      document.getElementById('modalActionInput').value = action;
+      const modal = new bootstrap.Modal(document.getElementById('actionModal'));
+      modal.show();
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

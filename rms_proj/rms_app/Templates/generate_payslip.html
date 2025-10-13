@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salary Payslip</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+ <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      color: #000;
+      font-size: 0.85rem;
+    }
+
+    .payslip-card {
+      max-width: 700px;
+      margin: auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .payslip-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("{% static 'rms_app/images/agt_img.png' %}");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 500px;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .payslip-card > * {
+      position: relative;
+      z-index: 3;
+    }
+
+    .logo-center {
+      display: block;
+      margin: 0 auto 8px auto;
+      width: 100px;
+    }
+
+    .payslip-header h2 {
+      text-align: center;
+      font-weight: bold;
+      color: #007bff;
+      text-transform: uppercase;
+      font-size: 1.2rem;
+      margin-bottom: 2px;
+    }
+
+    .company-address {
+      font-size: 0.8rem;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .month-title {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .month-selector {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      color: #043366;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 2px;
+      font-size: 0.9rem;
+    }
+
+    .table th,
+    .table td {
+      padding: 4px 8px;
+    }
+
+    .net-pay {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #28a745;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .btn-back,
+    .btn-print {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      text-decoration: none;
+      margin: 10px 6px 0 6px;
+      font-size: 0.85rem;
+    }
+
+    .btn-back:hover,
+    .btn-print:hover {
+      background-color: #fff;
+      color: #007bff;
+      border: 1px solid #007bff;
+    }
+
+    .action-buttons {
+      text-align: center;
+    }
+
+    @media print {
+      .month-selector,
+      .action-buttons {
+        display: none !important;
+      }
+
+      .payslip-card {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        max-width: 100%;
+      }
+
+      body {
+        padding: 0;
+        font-size: 0.75rem;
+        background: none !important;
+      }
+
+      .logo-center {
+        width: 80px;
+        margin-bottom: 6px;
+      }
+
+      .payslip-header h2 {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 0.8rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 3px 6px;
+      }
+
+      .net-pay {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="payslip-card">
+    <img src="{% static 'rms_app/images/agt_img.png' %}" alt="Company Logo" class="logo-center" />
+
+    <div class="payslip-header">
+      <h2>APTSOL GLOBAL TECH PRIVATE LIMITED</h2>
+    </div>
+
+    <div class="company-address">
+      Imperial Square, 1st Floor, HUDA Techno Enclave, Beside Medicover Hospitals, Hitech City Hyderabad, Telangana 500081
+    </div>
+
+    <div class="month-title">
+      Salary Payslip for the Month of {{ selected_month }}
+    </div>
+
+    <div class="month-selector">
+      <form method="get">
+        <label for="month">Select Month:</label>
+        <select name="month" id="month" onchange="this.form.submit()">
+          {% for m in month_list %}
+            <option value="{{ m }}" {% if selected_month == m %}selected{% endif %}>{{ m }}</option>
+          {% endfor %}
+        </select>
+      </form>
+    </div>
+
+    {% if not show_payslip %}
+      <script>alert("{{ warning_message }}");</script>
+    {% else %}
+      <div class="section-title">Employee Details</div>
+      <table class="table table-sm table-bordered">
+        <tr><th>Name</th><td>{{ user.username }}</td></tr>
+        <tr><th>Employee ID</th><td>{{ user.profile.emp_id }}</td></tr>
+        <tr><th>Designation</th><td>{{ user.profile.designation }}</td></tr>
+        <tr><th>PAN Number</th><td>{{ user.profile.pan }}</td></tr>
+        <tr><th>Date of Joining</th><td>{{ user.profile.doj|default:"02-08-2023" }}</td></tr>
+        <tr><th>Mode of Pay</th><td>Bank</td></tr>
+      </table>
+
+      <div class="section-title">Earnings</div>
+      <table class="table table-sm table-bordered">
+        <tr><th>Basic Pay</th><td>₹{{ basic }}</td></tr>
+        <tr><th>House Rent Allowance (HRA)</th><td>₹{{ hra }}</td></tr>
+        <tr><th>Special Allowance</th><td>₹{{ special_allowance }}</td></tr>
+        <tr><th>Conveyance Allowance</th><td>₹{{ travel }}</td></tr>
+        <tr><th>Medical Allowance</th><td>₹{{ medical }}</td></tr>
+        <tr class="table-success"><th><strong>Gross Earnings</strong></th><td><strong>₹{{ gross_earnings }}</strong></td></tr>
+      </table>
+
+      <div class="section-title">Deductions</div>
+      <table class="table table-sm table-bordered">
+        <tr><th>Professional Tax</th><td>₹200.00</td></tr>
+        <tr><th>EWF</th><td>₹600.00</td></tr>
+        <tr class="table-danger"><th><strong>Gross Deductions</strong></th><td><strong>₹{{ deductions }}</strong></td></tr>
+      </table>
+
+      <div class="net-pay">Net Pay: ₹{{ net_pay }}</div>
+      <div class="text-center mt-2">In Words: {{ net_words }}</div>
+
+      <div class="section-title">Bank Details</div>
+      <table class="table table-sm table-bordered">
+        <tr><th>Bank Name</th><td>Union Bank</td></tr>
+        <tr><th>Account Number</th><td>371202010028023</td></tr>
+      </table>
+
+      <div class="text-center mt-4">
+        <small>This is a system-generated statement and does not require a seal or signature.</small>
+      </div>
+
+      <div class="action-buttons">
+        {% if request.user.is_superuser %}
+          <a href="{% url 'home' %}" class="btn-back"><i class="fas fa-arrow-left me-2"></i>Back to Dashboard</a>
+        {% elif request.user.profile.role == 'admin' %}
+          <a href="{% url 'admin_dashboard' %}" class="btn-back"><i class="fas fa-arrow-left me-2"></i>Back to Dashboard</a>
+        {% endif %}
+        <button onclick="window.print()" class="btn-print"><i class="fas fa-print me-2"></i>Print Payslip</button>
+      </div>
+    {% endif %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

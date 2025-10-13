@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<style>
+  .search-wrapper {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .search-container {
+    width: 100%;
+    max-width: 1000px;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+  }
+
+  .search-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #007bff;
+    text-transform: uppercase;
+  }
+
+  .search-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+
+  .search-form select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-weight: 500;
+    background-color: #fff;
+    color: #333;
+    min-width: 200px;
+  }
+
+  .search-form button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    font-weight: 600;
+  }
+
+  .result-block {
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .result-block h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #28a745;
+  }
+
+  .result-block p {
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .no-results {
+    text-align: center;
+    font-size: 1rem;
+    color: #666;
+    margin-top: 20px;
+  }
+
+  a.back-button {
+    margin-left: 416px;
+}
+
+  .back-button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  }
+
+  .back-button:hover {
+    background-color: #ffffff;
+    color: #28a745;
+    border: 2px solid #28a745;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+  }
+</style>
+
+<div class="search-wrapper">
+  <div class="search-container">
+    <div class="search-title">Search Results for "{{ query }}"</div>
+
+    <form class="search-form">
+      <select onchange="redirectToPage(this.value)">
+        {% if request.user.profile.role == 'admin' %}
+          <option value="">-- Select Admin Page --</option>
+          <option value="{% url 'add_employee' %}">Add Employee</option>
+          <option value="{% url 'emp_list1' %}">Employee List</option>
+          <option value="{% url 'manage_requests' %}">Manage Requests</option>
+          <option value="{% url 'manage_employees' %}">Manage Employees</option>
+        {% elif request.user.profile.role == 'superuser' %}
+          <option value="">-- Select Superuser Page --</option>
+          <option value="{% url 'home' %}">Home</option>
+          <option value="{% url 'add_employee_superuser' %}">Add Employee</option>
+          <option value="{% url 'employee_list' %}">Employee List</option>
+          <option value="{% url 'manage_employee_superuser' %}">Manage Employees</option>
+        {% elif request.user.profile.role == 'user' %}
+          <option value="">-- Select User Page --</option>
+          <option value="{% url 'user_dashboard' %}">Dashboard</option>
+          <option value="{% url 'request_overview' %}">My Requests</option>
+          <option value="{% url 'submit_request' %}">Submit Request</option>
+          <option value="{% url 'user_details' %}">Profile</option>
+        {% endif %}
+      </select>
+      <button type="button" onclick="alert('Use dropdown to navigate')">
+        <i class="bi bi-search"></i> Go
+      </button>
+    </form>
+
+    {% if results %}
+      {% for result in results %}
+        <div class="result-block">
+          <h5>{{ result.username }}</h5>
+          <p>Email: {{ result.email }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="no-results">No results found for this category.</div>
+    {% endif %}
+    
+
+  </div>
+</div>
+
+<script>
+  function redirectToPage(url) {
+    if (url) {
+      window.location.href = url;
+    }
+  }
+</script>
+{% endblock %}

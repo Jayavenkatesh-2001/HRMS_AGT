@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .sidebar {
+    width: 220px;
+    background-color: rgba(255, 255, 255, 1);
+    backdrop-filter: blur(10px);
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: calc(100vh - 60px);
+    z-index: 1000;
+    transition: width 0.3s ease;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar.collapsed {
+    width: 80px;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #0a0a0aff;
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+  }
+
+  .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+  }
+
+  .nav-text {
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .sidebar.collapsed .nav-text {
+    display: none;
+  }
+
+  .toggle-btn {
+    background: none;
+    border: none;
+    color: #28a745;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .sidebar-footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #060606ff;
+  }
+
+  .main-content {
+    margin-left: 220px;
+    height: calc(100vh - 14px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: margin-left 0.3s ease;
+  }
+
+  .main-content.collapsed {
+    margin-left: 80px;
+  }
+
+  .card-wrapper {
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+    max-width: 1000px;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .hero-section {
+    text-align: center;
+    padding: 20px 20px 40px;
+  }
+
+  .hero-section h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    background-color: #007bff;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .info-card {
+    background-color: rgba(255, 255, 255, 0.6);
+    border: none;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    color: #000000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+  }
+
+  .info-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .info-card i {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: #28a745;
+    text-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+  }
+
+  .info-card h5 {
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+  }
+
+  .info-card p {
+    font-size: 1rem;
+    color: #333333;
+  }
+
+  @media (max-width: 768px) {
+    html, body {
+      overflow: auto;
+    }
+
+    .main-content {
+      margin-left: 0;
+      padding: 20px;
+      height: auto;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar {
+      width: 100%;
+      height: auto;
+      flex-direction: row;
+      justify-content: space-around;
+      position: static;
+    }
+
+    .sidebar-footer {
+      display: none;
+    }
+
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-nav">
+    <a href="{% url 'employee_list' %}" class="nav-link">
+      <i class="bi bi-person-lines-fill"></i>
+      <span class="nav-text">Employee List</span>
+    </a>
+    <a href="{% url 'add_employee' %}" class="nav-link">
+      <i class="bi bi-person-plus-fill"></i>
+      <span class="nav-text">Add Employee</span>
+    </a>
+    <a href="{% url 'manage_employee_superuser' %}" class="nav-link">
+      <i class="bi bi-people-fill"></i>
+      <span class="nav-text">Manage Employees</span>
+    </a>
+    <a href="{% url 'logout' %}" class="nav-link">
+      <i class="bi bi-box-arrow-right"></i>
+      <span class="nav-text">Logout</span>
+    </a>
+  </div>
+
+  <div>
+    <button class="toggle-btn" onclick="toggleSidebar()">
+      <i id="toggleIcon" class="bi bi-chevron-double-left"></i>
+    </button>
+    <div class="sidebar-footer">
+      Hello <strong>{{ request.user.username }}</strong><br />
+      Logged in as <strong>superuser</strong>
+    </div>
+  </div>
+</div>
+
+<div class="main-content" id="mainContent">
+  <div class="card-wrapper">
+    <div class="hero-section">
+      <h1>Welcome to Home</h1>
+    </div>
+
+    <div class="card-grid">
+      <a href="{% url 'employee_list' %}" class="info-card text-decoration-none">
+        <i class="bi bi-person-lines-fill"></i>
+        <h5>Employee List</h5>
+        <p>View all registered employees.</p>
+      </a>
+
+      <a href="{% url 'add_employee' %}" class="info-card text-decoration-none">
+        <i class="bi bi-person-plus-fill"></i>
+        <h5>Add Employee</h5>
+        <p>Add a new employee to the system.</p>
+      </a>
+
+      <a href="{% url 'manage_employee_superuser' %}" class="info-card text-decoration-none">
+        <i class="bi bi-people-fill"></i>
+        <h5>Manage Employees</h5>
+        <p>Edit or remove existing employee profiles.</p>
+      </a>
+
+      <a href="{% url 'manage_requests' %}" class="info-card text-decoration-none">
+        <i class="bi bi-journal-check"></i>
+        <h5>Manage Requests</h5>
+        <p>Review and respond to employee requests.</p>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    sidebar.classList.toggle('collapsed');
+    mainContent.classList.toggle('collapsed');
+
+    toggleIcon.classList.toggle('bi-chevron-double-left');
+    toggleIcon.classList.toggle('bi-chevron-double-right');
+  }
+</script>
+{% endblock %}

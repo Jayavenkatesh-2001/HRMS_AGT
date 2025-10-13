@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About RMS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #256969, #af4489);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background-color: #1c1c1c;
+      padding: 10px 20px;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      background: linear-gradient(to right, #f9d423, #ff4e50);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-outline-light {
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background-color: #08eff3ff;
+  color: #1c1c1c;
+}
+
+ 
+    .hero-section {
+      text-align: center;
+      padding: 60px 20px 30px;
+    }
+
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(20deg, #f0964c, #fa048f, #00c6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .hero-section p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      color: #f0f0f0;
+    }
+
+    .card-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      padding: 40px 20px;
+    }
+
+    .info-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 30px;
+      width: 300px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      color: #f8f9fa;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 70%);
+      transform: rotate(25deg);
+      z-index: 0;
+    }
+
+    .info-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(0, 198, 255, 0.4);
+    }
+
+    .info-card i {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #00c6ff;
+      text-shadow: 0 0 8px rgba(0, 198, 255, 0.6);
+      z-index: 1;
+      position: relative;
+    }
+
+    .info-card h5 {
+      font-weight: 700;
+      margin-bottom: 10px;
+      font-size: 1.25rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .info-card p {
+      font-size: 1rem;
+      color: #e0e0e0;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* Timeline Styles */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+      border-left: 2px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-icon {
+      position: absolute;
+      background: #ff00845a;
+      bottom:50px;
+      left: -50px;
+      top: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 0 10px rgba(0, 200, 255, 0.67);
+    }
+
+    .timeline-content {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      color: #e0e0e0;
+    }
+
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2.2rem;
+      }
+
+      .info-card {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">RMS Admin</a>
+    </div>
+  </nav>
+
+  <!-- Home Button Below Navbar -->
+<div class="container-fluid d-flex justify-content-end mt-3 pe-4">
+  <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm shadow-sm">
+    <i class="bi bi-house-door-fill me-1"></i> 
+  </a>
+</div>
+
+
+ 
+
+  <!-- Hero Section -->
+ <div class="hero-section">
+  <h1>About RMS</h1>
+  <p>
+    The <strong>Request Management System (RMS)</strong> is a robust platform built to optimize how organizations manage internal and external requests. Whether it's a service inquiry, resource allocation, or administrative approval, RMS provides a centralized, secure, and user-friendly interface for handling it all.
+  </p>
+</div>
+
+  <div class="card-section">
+    <div class="info-card">
+      <i class="bi bi-pencil-square"></i>
+      <h5>Request Submission</h5>
+      <p>Users can submit requests with detailed forms, attachments, and priority levels.</p>
+    </div>
+    <div class="info-card">
+      <i class="bi bi-person-check-fill"></i>
+      <h5>Admin Review</h5>
+      <p>Admins receive notifications and can approve or reject requests with comments.</p>
+    </div>
+    <div class="info-card">
+      <i class="bi bi-bell-fill"></i>
+      <h5>User Management</h5>
+      <p>Admins can manage user roles, permissions, and access to ensure security.</p>
+    </div>
+    <div class="info-card">
+      <i class="bi bi-gear-fill"></i>
+      <h5>Customizable Settings</h5>
+      <p>Admins can configure system settings, notification preferences, and request forms.</p>
+    </div>
+    <div class="info-card">
+      <i class="bi bi-shield-lock-fill"></i>
+      <h5>Security & Compliance</h5>
+      <p>RMS ensures data security with role-based access control and encryption.</p>
+    </div>
+    <div class="info-card">
+      <i class="bi bi-clock-history"></i>
+      <h5>Status Tracking</h5>
+      <p>Real-time updates allow users to track request progress and history.</p>
+    </div>
+    <div class="info-card">
+      <i class="bi bi-bar-chart-fill"></i>
+      <h5>Analytics & Reports</h5>
+      <p>Admins can generate reports to analyze request trends and team performance.</p>
+    </div>
+    <p>
+    RMS is more than just a request tracker—it's a complete ecosystem for managing workflows, enhancing communication, and driving operational excellence.
+  </p>
+  </div>
+
+  <div class="container py-5">
+    <h2 class="text-center mb-5" style="background: linear-gradient(to right, #23f95c, #00a6ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">RMS Workflow</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-icon bg-info text-white"><i class="bi bi-pencil-square"></i></div>
+            <div class="timeline-content">
+              <h5>Step 1: User Submits Request</h5>
+              <p>The user fills out a request form with necessary details and submits it through the dashboard.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-icon bg-warning text-white"><i class="bi bi-person-check-fill"></i></div>
+            <div class="timeline-content">
+              <h5>Step 2: Admin Reviews Request</h5>
+              <p>Admins receive alerts, view request details, and take action—approve, reject, or request more info.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-icon bg-success text-white"><i class="bi bi-bell-fill"></i></div>
+            <div class="timeline-content">
+              <h5>Step 3: Status Updates & Notifications</h5>
+              <p>Users are notified of status changes. All actions are logged for transparency and future reference.</p>
+            </div>
+          </div>
+            <div class="timeline-item">
+                <div class="timeline-icon bg-primary text-white"><i class="bi bi-bar-chart-fill"></i></div>
+                <div class="timeline-content">
+                <h5>Step 4: Reporting & Analytics</h5>
+                <p>Admins can generate reports to analyze request patterns, team performance, and overall efficiency.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon bg-danger text-white"><i class="bi bi-people-fill"></i></div>
+                <div class="timeline-content">
+                <h5>Step 5: User Management</h5>
+                <p>Admins can add, edit, or remove users, assign roles, and manage access permissions to ensure security.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon bg-secondary text-white"><i class="bi bi-gear-fill"></i></div>
+                <div class="timeline-content">
+                <h5>Step 6: System Settings</h5>
+                <p>Admins can configure system settings, customize request forms, and set up notification preferences to tailor the RMS to organizational needs.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon bg-dark text-white"><i class="bi bi-shield-lock-fill"></i></div>
+                <div class="timeline-content">
+                <h5>Step 7: Security & Compliance</h5>
+                <p>RMS ensures data security with role-based access control, encryption, and compliance with industry standards to protect sensitive information.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon bg-success text-white"><i class="bi bi-cloud-arrow-up-fill"></i></div>
+                <div class="timeline-content">
+                <h5>Step 8: Cloud Integration & Backup</h5>
+                <p>RMS supports cloud integration for seamless access and automatic backups to prevent data loss and ensure business continuity.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon bg-info text-white"><i class="bi bi-phone-fill"></i></div>
+                <div class="timeline-content">
+                <h5>Step 9: Mobile Access</h5>
+                <p>Users and admins can access RMS on mobile devices, allowing for request submission and management on-the-go.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon bg-primary text-white"><i class="bi bi-life-preserver"></i></div>
+                <div class="timeline-content">
+                <h5>Step 10: Support & Maintenance</h5>
+                <p>RMS offers dedicated support and regular maintenance to ensure smooth operation and address any issues promptly.</p>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+  .toggle-btn {
+      margin-top: 10px;
+      background-color: #28a745;
+      border: none;
+      color: #ffffff;
+      padding: 6px 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+    }
+
+
+
+
+     <div class="user-info">
+      Hello <strong>{{ request.user.username }}</strong><br />
+      Logged in as <strong>Admin</strong>
+    </div>
+    <button class="toggle-btn" onclick="toggleSidebar()">
+      <i class="fas fa-angle-double-left" id="toggleIcon"></i>
+    </button>
+  </div>
