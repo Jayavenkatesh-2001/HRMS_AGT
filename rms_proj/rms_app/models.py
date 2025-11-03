@@ -54,11 +54,13 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    doj = models.DateField(auto_now_add=True) 
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, null=True, blank=True)
     emp_id = models.CharField(max_length=20, null=True, blank=True)
     designation = models.CharField(max_length=100, null=True, blank=True)
     pan = models.CharField(max_length=20, null=True, blank=True)
     salary_lpa = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    doj = models.DateField(null=True, blank=True) 
 
     def __str__(self):
         return f"{self.user.username} - {self.role or 'No Role'} ({self.emp_id or 'No ID'})"

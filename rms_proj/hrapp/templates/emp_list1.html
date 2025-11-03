@@ -27,7 +27,7 @@
       width: 90%;
       max-width: 1000px;
       min-height: 80vh;
-      top: 47%;
+      top: 40%;
       left:33%;
       transform: translate(-50%, -50%);
       background-color: rgba(255, 255, 255, 0.7);
@@ -234,39 +234,35 @@
             </thead>
             <tbody>
               {% for user in users %}
-                <tr>
-                  <td>{{ user.username }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>
-                    {% if user.is_superuser or user.is_staff %}
-                      <span>Admin</span>
-                    {% else %}
-                      <span>User</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if user.is_active %}
-                      <span class="badge">Active</span>
-                    {% else %}
-                      <span class="badge">Inactive</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    <a href="{% url 'view_user_superuser' user.id %}" class="btn-icon" title="View">
-                      <i class="fas fa-eye"></i>
-                    </a>
-                    <a href="{% url 'edit_user_superuser' user.id %}" class="btn-icon" title="Edit">
-                      <i class="fas fa-edit"></i>
-                    </a>
-                  </td>
-                </tr>
+                {% if not user.is_superuser and not user.is_staff %}
+                  <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td><span>User</span></td>
+                    <td>
+                      {% if user.is_active %}
+                        <span class="badge">Active</span>
+                      {% else %}
+                        <span class="badge">Inactive</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <a href="{% url 'view_user' user.id %}" class="btn-icon" title="View">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                      <a href="{% url 'edit_user' user.id %}" class="btn-icon" title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                    </td>
+                  </tr>
+                {% endif %}
               {% endfor %}
             </tbody>
           </table>
         </div>
       </div>
 
-      <a href="{% url 'home' %}" class="btn-dashboard">
+      <a href="{% url 'admin_dashboard' %}" class="btn-dashboard">
         <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
       </a>
     </div>
@@ -283,18 +279,13 @@
       const nameCell = rows[i].getElementsByTagName("td")[0];
       const roleCell = rows[i].getElementsByTagName("td")[2];
 
-      if (nameCell && roleCell) {
-        const nameText = nameCell.textContent.toLowerCase();
-        const roleText = roleCell.textContent.toLowerCase();
-
-        if (nameText.includes(input) || roleText.includes(input)) {
-          rows[i].style.display = "";
-        } else {
-          rows[i].style.display = "none";
-        }
+      if (nameCell && role      if (nameText.includes(input) || roleText.includes(input)) {
+        rows[i].style.display = "";
+      } else {
+        rows[i].style.display = "none";
       }
     }
   }
-</script>
+  </script>
 </body>
 </html>
