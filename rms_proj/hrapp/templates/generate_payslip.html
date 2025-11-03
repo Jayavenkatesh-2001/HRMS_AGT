@@ -53,7 +53,7 @@
     .logo-center {
       display: block;
       margin: 0 auto 8px auto;
-      width: 100px;
+      width: 120px;
     }
 
     .payslip-header h2 {
@@ -208,7 +208,7 @@
         <tr><th>Employee ID</th><td>{{ user.profile.emp_id }}</td></tr>
         <tr><th>Designation</th><td>{{ user.profile.designation }}</td></tr>
         <tr><th>PAN Number</th><td>{{ user.profile.pan }}</td></tr>
-        <tr><th>Date of Joining</th><td>{{ user.profile.doj|default:"02-08-2023" }}</td></tr>
+        <tr><th>Date of Joining</th><td>{{ user.profile.doj|date:"d-m-Y" }}</td></tr>
         <tr><th>Mode of Pay</th><td>Bank</td></tr>
       </table>
 
